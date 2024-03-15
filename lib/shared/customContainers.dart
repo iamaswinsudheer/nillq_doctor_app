@@ -272,8 +272,9 @@ class CustomContainerForReports extends StatelessWidget {
 //custom container for date picker
 class CustomContainerForTimePicker extends StatefulWidget {
   final void Function(String startTime, String endTime) onTap;
+  final VoidCallback onClose;
 
-  CustomContainerForTimePicker({required this.onTap});
+  CustomContainerForTimePicker({required this.onTap, required this.onClose});
 
   @override
   State<CustomContainerForTimePicker> createState() =>
@@ -305,9 +306,6 @@ class _CustomContainerForTimePickerState
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: screenSize.width * 0.04,
-          vertical: screenSize.height * 0.02),
       decoration: BoxDecoration(
           color: Colors.grey[200],
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -317,86 +315,125 @@ class _CustomContainerForTimePickerState
           Row(
             children: [
               Expanded(
-                  child: Text(
-                'Start time',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.grey[800],
-                    fontWeight: FontWeight.normal),
-              )),
-              ElevatedButton(
-                  onPressed: () async {
-                    final TimeOfDay? pickedStartTime = await showTimePicker(
-                        context: context, initialTime: startTime);
-
-                    if (pickedStartTime != null) {
-                      setState(() {
-                        formattedStartTime = formatTimeOfDay(pickedStartTime);
-                        selectedStartTime = true;
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)))),
-                  child: Text(
-                    'Choose',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(screenSize.width * 0.04,
+                      screenSize.height * 0.02, 0.0, 0.0),
+                  child: Text('Choose your available time slot',
+                      style:
+                          TextStyle(color: Colors.grey[800], fontSize: 18.0)),
+                ),
+              ),
+              IconButton(
+                  onPressed: widget.onClose,
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.red,
                   ))
             ],
           ),
+          SizedBox(
+            height: screenSize.height * 0.04,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                  'Start time',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.grey[800],
+                      fontWeight: FontWeight.normal),
+                )),
+                ElevatedButton(
+                    onPressed: () async {
+                      final TimeOfDay? pickedStartTime = await showTimePicker(
+                          context: context, initialTime: startTime);
+
+                      if (pickedStartTime != null) {
+                        setState(() {
+                          formattedStartTime = formatTimeOfDay(pickedStartTime);
+                          selectedStartTime = true;
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: themeColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)))),
+                    child: Text(
+                      'Choose',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    ))
+              ],
+            ),
+          ),
           selectedStartTime
-              ? Text(
-                  formattedStartTime,
-                  style: TextStyle(color: Colors.grey[800], fontSize: 16.0),
+              ? Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+                  child: Text(
+                    formattedStartTime,
+                    style: TextStyle(color: Colors.grey[800], fontSize: 16.0),
+                  ),
                 )
               : Container(),
           SizedBox(
             height: screenSize.height * 0.04,
           ),
-          Divider(),
+          Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+              child: Divider()),
           SizedBox(
             height: screenSize.height * 0.02,
           ),
-          Row(
-            children: [
-              Expanded(
-                  child: Text(
-                'End time',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.grey[800],
-                    fontWeight: FontWeight.normal),
-              )),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: themeColor,
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)))),
-                  onPressed: () async {
-                    final TimeOfDay? pickedEndTime = await showTimePicker(
-                        context: context, initialTime: endTime);
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                  'End time',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.grey[800],
+                      fontWeight: FontWeight.normal),
+                )),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: themeColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)))),
+                    onPressed: () async {
+                      final TimeOfDay? pickedEndTime = await showTimePicker(
+                          context: context, initialTime: endTime);
 
-                    if (pickedEndTime != null) {
-                      setState(() {
-                        formattedEndTime = formatTimeOfDay(pickedEndTime);
-                        selectedEndTime = true;
-                      });
-                    }
-                  },
-                  child: Text(
-                    'Choose',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
-                  ))
-            ],
+                      if (pickedEndTime != null) {
+                        setState(() {
+                          formattedEndTime = formatTimeOfDay(pickedEndTime);
+                          selectedEndTime = true;
+                        });
+                      }
+                    },
+                    child: Text(
+                      'Choose',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    ))
+              ],
+            ),
           ),
           selectedEndTime
-              ? Text(
-                  formattedEndTime,
-                  style: TextStyle(color: Colors.grey[800], fontSize: 16.0),
+              ? Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+                  child: Text(
+                    formattedEndTime,
+                    style: TextStyle(color: Colors.grey[800], fontSize: 16.0),
+                  ),
                 )
               : Container(),
           SizedBox(
@@ -404,24 +441,29 @@ class _CustomContainerForTimePickerState
           ),
           SizedBox(
             height: 45.0,
-            child: ElevatedButton(
-                onPressed: () {
-                  if (selectedStartTime & selectedEndTime) {
-                    widget.onTap(formattedStartTime, formattedEndTime);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                    primary: themeColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)))),
-                child: Text(
-                  'Add time slot',
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
-                )),
+            child: Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (selectedStartTime & selectedEndTime) {
+                      widget.onTap(formattedStartTime, formattedEndTime);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      primary: themeColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)))),
+                  child: Text(
+                    'Add time slot',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  )),
+            ),
           ),
           SizedBox(
-            height: screenSize.height * 0.01,
+            height: screenSize.height * 0.03,
           )
         ],
       ),

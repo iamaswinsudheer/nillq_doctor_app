@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nillq_doctor_app/screens/animatedCheck.dart';
 import 'package:nillq_doctor_app/shared/constants.dart';
 import 'package:nillq_doctor_app/shared/customContainers.dart';
 
@@ -11,6 +12,7 @@ class TimeSlots extends StatefulWidget {
 
 class _TimeSlotsState extends State<TimeSlots> {
   int timePickerCount = 1;
+  ScrollController _controller = new ScrollController();
   List<Map<String, String>> timeslots = [];
 
   Map<String, String> addTimesToJson(
@@ -24,12 +26,6 @@ class _TimeSlotsState extends State<TimeSlots> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
-        title: Text(
-          'Choose time slots',
-          style: appbarStyle,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
         actions: [
           timePickerCount == 0
               ? IconButton(
@@ -54,40 +50,72 @@ class _TimeSlotsState extends State<TimeSlots> {
             horizontal: screenSize.width * 0.02,
             vertical: screenSize.height * 0.01),
         child: Column(children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 0.0),
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: timeslots.length,
-                itemBuilder: (context, index) {
-                  return CustomTileForSelectedTimeSlots(
-                      onTap: () {
-                        setState(() {
-                          timeslots.removeAt(index);
-                        });
-                      },
-                      startTime: timeslots[index]['start_time']!,
-                      endTime: timeslots[index]['end_time']!);
-                }),
-          ),
-          SizedBox(
-            height: screenSize.height * 0.02,
-          ),
           Expanded(
-            child: ListView.builder(
-                itemCount: timePickerCount,
-                itemBuilder: (context, index) {
-                  return CustomContainerForTimePicker(
-                    onTap: (formattedStartTime, formattedEndTime) {
-                      setState(() {
-                        timeslots.add(addTimesToJson(
-                            formattedStartTime, formattedEndTime));
-                        timePickerCount -= 1;
-                      });
-                    },
-                  );
-                }),
+            child: ListView(children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 0.0),
+                child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: timeslots.length,
+                    itemBuilder: (context, index) {
+                      return CustomTileForSelectedTimeSlots(
+                          onTap: () {
+                            setState(() {
+                              timeslots.removeAt(index);
+                            });
+                          },
+                          startTime: timeslots[index]['start_time']!,
+                          endTime: timeslots[index]['end_time']!);
+                    }),
+              ),
+              timeslots.length == 0
+                  ? SizedBox()
+                  : SizedBox(
+                      height: screenSize.height * 0.02,
+                    ),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 1.0),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: timePickerCount,
+                    itemBuilder: (context, index) {
+                      return CustomContainerForTimePicker(
+                        onClose: () {
+                          setState(() {
+                            timePickerCount -= 1;
+                          });
+                        },
+                        onTap: (formattedStartTime, formattedEndTime) {
+                          setState(() {
+                            timeslots.add(addTimesToJson(
+                                formattedStartTime, formattedEndTime));
+                            timePickerCount -= 1;
+                          });
+                        },
+                      );
+                    }),
+              ),
+            ]),
           ),
+          Padding(
+            padding: EdgeInsets.only(top: screenSize.height * 0.005),
+            child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedCheck()));
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: themeColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: Text(
+                  'Save',
+                  style: TextStyle(color: Colors.white, fontSize: 18.0, letterSpacing: 1.0),
+                )),
+          )
         ]),
       ),
     );
