@@ -12,7 +12,6 @@ class TimeSlots extends StatefulWidget {
 
 class _TimeSlotsState extends State<TimeSlots> {
   int timePickerCount = 1;
-  ScrollController _controller = new ScrollController();
   List<Map<String, String>> timeslots = [];
 
   Map<String, String> addTimesToJson(
@@ -103,7 +102,13 @@ class _TimeSlotsState extends State<TimeSlots> {
             padding: EdgeInsets.only(top: screenSize.height * 0.005),
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AnimatedCheck()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnimatedCheck(
+                                message:
+                                    "Appointment schedule added successfully.",
+                              )));
                 },
                 style: ElevatedButton.styleFrom(
                   primary: themeColor,
@@ -113,7 +118,8 @@ class _TimeSlotsState extends State<TimeSlots> {
                 ),
                 child: Text(
                   'Save',
-                  style: TextStyle(color: Colors.white, fontSize: 18.0, letterSpacing: 1.0),
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 18.0, letterSpacing: 1.0),
                 )),
           )
         ]),
