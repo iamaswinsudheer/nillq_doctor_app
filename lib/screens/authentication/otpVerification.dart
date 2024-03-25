@@ -31,6 +31,7 @@ class _OtpVerificationState extends State<OtpVerification> {
           ),
           backgroundColor: Colors.white,
           elevation: 0,
+          scrolledUnderElevation: 0.0,
           centerTitle: true,
         ),
         body: SingleChildScrollView(
@@ -76,7 +77,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                               inactiveColor: themeColor),
                         ),
                         SizedBox(
-                          height: screenSize.height * 0.04,
+                          height: screenSize.height * 0.1,
                         ),
                         ElevatedButton(
                             onPressed: () {
@@ -97,7 +98,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 primary: themeColor,
-                                minimumSize: const Size.fromHeight(60))),
+                                minimumSize: const Size.fromHeight(50))),
                       ]))),
         ));
   }

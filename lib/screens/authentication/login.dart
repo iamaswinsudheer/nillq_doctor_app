@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nillq_doctor_app/screens/authentication/otpVerification.dart';
+import 'package:nillq_doctor_app/screens/authentication/phoneNumber.dart';
+import 'package:nillq_doctor_app/screens/home/home.dart';
 import 'package:nillq_doctor_app/shared/constants.dart';
 
 class Login extends StatefulWidget {
@@ -10,6 +11,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
+  late String loginId;
+  late String password;
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -18,84 +22,108 @@ class _LoginState extends State<Login> {
         child: Container(
           width: screenSize.width,
           padding: EdgeInsets.symmetric(
-              vertical: screenSize.height * 0.1,
+              vertical: screenSize.height * 0.08,
               horizontal: screenSize.width * 0.1),
           child: SafeArea(
             child: Form(
+              key: _formKey,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Image.asset(
-                      'assets/icons/cardiogram.png',
-                      width: 100.0,
-                      height: 100.0,
-                    ),
-                    SizedBox(
-                      width: screenSize.width * 0.05,
-                    ),
-                    Text(
-                      'NillQ',
-                      style: TextStyle(
-                        letterSpacing: 2.0,
-                        fontSize: 35.0,
-                        fontWeight: FontWeight.bold,
-                        color: themeColor,
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenSize.height * 0.02,
-                    ),
-                    Text(
-                      'Hello Doctor!',
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                        color: themeColor,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'assets/icons/medical-app.png',
+                          width: 100.0,
+                          height: 100.0,
+                        ),
+                        SizedBox(
+                          width: screenSize.width * 0.03,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'NillQ',
+                              style: TextStyle(
+                                letterSpacing: 2.0,
+                                fontSize: 35.0,
+                                fontWeight: FontWeight.bold,
+                                color: themeColor,
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenSize.height * 0.01,
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'Empower your practice.',
+                                style: TextStyle(
+                                    color: themeColor, fontSize: 16.0),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: screenSize.height * 0.05,
                     ),
                     Text(
-                      'Ready to dive deeper? Sign in for enhanced app functionality.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
+                      'Login id',
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                     ),
                     SizedBox(
-                      height: screenSize.height * 0.05,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Sign in using phone number',
-                        style: TextStyle(fontSize: 14.0, color: Colors.grey[700]),
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenSize.height * 0.02,
+                      height: screenSize.height * 0.005,
                     ),
                     TextFormField(
+                      cursorColor: Colors.grey,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Login id required';
+                        } else {
+                          loginId = value;
+                          return null;
+                        }
+                      },
                       keyboardType: TextInputType.number,
                       scrollPadding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom * 1.2),
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 1.2),
                       decoration: textInputDecorationWithTheme.copyWith(
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                                screenSize.width * 0.035,
-                                screenSize.height * 0.015,
-                                screenSize.width * 0.01,
-                                screenSize.height * 0.01),
-                            child: Text(
-                              '+ 91',
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  color: Colors.grey[500],
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          hintText: 'Enter Your Phone Number',
+                          hintText: 'Enter your login id',
+                          hintStyle: TextStyle(color: Colors.grey[500])),
+                    ),
+                    SizedBox(
+                      height: screenSize.height * 0.03,
+                    ),
+                    Text(
+                      'Password',
+                      style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+                    ),
+                    SizedBox(
+                      height: screenSize.height * 0.005,
+                    ),
+                    TextFormField(
+                      cursorColor: Colors.grey,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password required';
+                        } else {
+                          password = value;
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                      scrollPadding: EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).viewInsets.bottom * 1.2),
+                      decoration: textInputDecorationWithTheme.copyWith(
+                          hintText: 'Enter your password',
                           hintStyle: TextStyle(color: Colors.grey[500])),
                     ),
                     SizedBox(
@@ -103,10 +131,11 @@ class _LoginState extends State<Login> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OtpVerification()));
+                        if (_formKey.currentState!.validate()) {
+                          print('login id: $loginId, password: $password');
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Home()));
+                        }
                       },
                       child: Text(
                         'Sign In',
@@ -173,6 +202,39 @@ class _LoginState extends State<Login> {
                             ),
                             Text(
                               'Sign in with google',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey[700],
+                              ),
+                            )
+                          ],
+                        )),
+                    SizedBox(
+                      height: screenSize.height * 0.03,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => GetPhoneNumber()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/phone-call.png',
+                              width: 15.0,
+                              height: 15.0,
+                            ),
+                            SizedBox(
+                              width: screenSize.width * 0.02,
+                            ),
+                            Text(
+                              'Sign in with phone number',
                               style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.grey[700],

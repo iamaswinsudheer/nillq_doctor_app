@@ -39,6 +39,13 @@ dependencies:
   dotted_border: ^2.1.0
   file_picker: ^6.1.1
   intl: ^0.19.0
+  flutter_native_splash: ^2.3.11
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icons/medical-app.png
+  android: true
+  ios: true
 
 dev_dependencies:
   flutter_test:
